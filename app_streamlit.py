@@ -2,12 +2,14 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
+st.set_page_config(layout="wide")
+
 st.title("Toolbox tổng hợp số liệu")
 
 uploaded_file = st.file_uploader("Chọn file dữ liệu CSV/Excel", type=["csv", "xlsx"])
 
 cycle_option = st.selectbox("Chọn chu kỳ thời gian", ["30 phút", "1 giờ"])
-summary_option = st.selectbox("Chọn kiểu tổng sản lượng", ["Theo tháng", "Theo quý", "Theo năm"])
+summary_option = st.selectbox("Chọn kiểu tổng sản lượng", ["Theo ngày", "Theo tháng", "Theo quý", "Theo năm"])
 
 output_filename = st.text_input("Nhập tên file để lưu (không cần phần mở rộng)", value="output")
 
@@ -17,11 +19,7 @@ if uploaded_file is not None:
     else:
         df = pd.read_excel(uploaded_file)
 
-    # st.write("Dữ liệu ban đầu:")
-    # st.write(df.head())
-
     df['Time'] = pd.to_datetime(df['Time'], errors='coerce')
-
     df.set_index('Time', inplace=True)
 
     if cycle_option == "30 phút":
@@ -29,15 +27,14 @@ if uploaded_file is not None:
     elif cycle_option == "1 giờ":
         df_resampled = df.resample('H').mean()
 
-    if summary_option == "Theo tháng":
-        df_summary = df_resampled.resample('ME').sum()
+    if summary_option == "Theo ngày":
+        df_summary = df_resampled.resample('D').sum()
+    elif summary_option == "Theo tháng":
+        df_summary = df_resampled.resample('M').sum()
     elif summary_option == "Theo quý":
-        df_summary = df_resampled.resample('QE').sum()
+        df_summary = df_resampled.resample('Q').sum()
     elif summary_option == "Theo năm":
-        df_summary = df_resampled.resample('YE').sum()
-
-    # st.write(f"Dữ liệu sau khi tổng hợp {summary_option.lower()}:")
-    # st.write(df_summary.head())
+        df_summary = df_resampled.resample('Y').sum()
 
     st.subheader("Biểu đồ dữ liệu tổng hợp")
     
