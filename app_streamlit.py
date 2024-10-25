@@ -26,8 +26,9 @@ if uploaded_file is not None:
         df_resampled = df.resample('30T').mean()
     elif cycle_option == "1 giờ":
         df_resampled = df.resample('H').mean()
-
-    if summary_option == "Theo ngày":
+    if summary_option == "Theo giờ":
+        df_summary = df_resampled.resample('H').sum()
+    elif summary_option == "Theo ngày":
         df_summary = df_resampled.resample('D').sum()
     elif summary_option == "Theo tháng":
         df_summary = df_resampled.resample('M').sum()
