@@ -9,7 +9,7 @@ st.title("Toolbox tổng hợp số liệu")
 uploaded_file = st.file_uploader("Chọn file dữ liệu CSV/Excel", type=["csv", "xlsx"])
 
 cycle_option = st.selectbox("Chọn chu kỳ thời gian", ["30 phút", "1 giờ"])
-summary_option = st.selectbox("Chọn kiểu tổng sản lượng", ["Theo ngày", "Theo tháng", "Theo quý", "Theo năm"])
+summary_option = st.selectbox("Chọn kiểu tổng sản lượng", ["Theo giờ","Theo ngày", "Theo tháng", "Theo quý", "Theo năm"])
 
 output_filename = st.text_input("Nhập tên file để lưu (không cần phần mở rộng)", value="output")
 
